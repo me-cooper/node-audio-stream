@@ -34,8 +34,11 @@ io.on('connection', (socket) => {
     })
 
     socket.on('stop', (data, ack) => {
+        console.log(data);
+        console.log("stop wurde gesendet");
+
         const f32array = toF32Array(buffer)
-        const filename = `public/wav/${String(Date.now())}.wav`
+        const filename = './public/wav/' + data.filename + '.wav'
         exportWAV(f32array, sampleRate, filename)
         ack({ filename: filename })
     })
