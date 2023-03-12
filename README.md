@@ -49,9 +49,9 @@ module.exports = {
 
 ### Development Notes
 
-If you want to use the client on mobile devices, a HTTPs connection to the server may be required. Otherwise some devices won't even give access to your microphone.
+If the server is not running locally, a HTTPs connection is required. Otherwise the client will not be able to access the microphone.
 
-If you use a reverse proxy in front of your application, lease also consider the websocket connection. Here is my example for a **Apache2 webserver**.
+If you use a reverse proxy in front of your application, lease also consider the websocket connection. Here is my example for a **Apache2 webserver**. Note the port of your application.
 
 ```apache
 # Required for websockets
