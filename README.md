@@ -44,3 +44,20 @@ module.exports = {
 ![node-audio-recorder-console](./git_assets/node-audio-recorder-console.png)
 
 ![node-audio-recorder-file](./git_assets/node-audio-recorder-file.png)
+
+---
+
+### Development Notes
+
+If you want to use the client on mobile devices, a HTTPs connection to the server may be required. Otherwise some devices won't even give access to your microphone.
+
+If you use a reverse proxy in front of your application, lease also consider the websocket connection. Here is my example for a **Apache2 webserver**.
+
+```apache
+# Required for websockets
+RewriteEngine on
+RewriteCond %{HTTP:UPGRADE} ^WebSocket$ [NC]
+RewriteCond %{HTTP:CONNECTION} ^Upgrade$ [NC]
+RewriteRule .* ws://localhost:3333%{REQUEST_URI} [P]
+```
+
