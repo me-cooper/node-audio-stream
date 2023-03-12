@@ -12,14 +12,15 @@ $(document).ready(function(){
     $('#textbox').val(defaultFilename);
 
     $('.toggler').click(function(){
+        var filename = $('#textbox').val();
         if($(this).hasClass("active")) {
             // Stop recording
             $(this).removeClass("active");
-            stopRecording(defaultFilename);
+            stopRecording(filename);
         }else{
             // Start recording
             $(this).addClass("active");
-            startRecording(defaultFilename);
+            startRecording(filename);
         }
     });
       
