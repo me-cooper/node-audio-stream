@@ -1,0 +1,140 @@
+@import "timeframes.css";
+
+@import url(https://fonts.googleapis.com/css?family=Fjalla+One);
+body {
+  overflow: hidden;
+  background: #000;
+}
+body .container {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 250px;
+  height: 250px;
+  margin: -125px -125px;
+}
+body .container #btn {
+  display: none;
+}
+body .container #btn + label:before {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 130px;
+  height: 130px;
+  margin: -65px -65px;
+  content: "";
+  -webkit-transform: translate(-6px, -6px);
+  -ms-transform: translate(-6px, -6px);
+  transform: translate(-6px, -6px);
+  border-radius: 50%;
+  border: 6px solid #fff;
+  cursor: pointer;
+}
+body .container #btn + label:after {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 100px;
+  height: 100px;
+  margin: -50px -50px;
+  content: "";
+  border-radius: 50px;
+  background: #e80415;
+  cursor: pointer;
+}
+body .container #btn:checked + label:after {
+  -webkit-animation: stop 0.5s infinite cubic-bezier(0.4, -0.9, 0.9, 1);
+  -moz-animation: stop 0.5s infinite cubic-bezier(0.4, -0.9, 0.9, 1);
+  -o-animation: stop 0.5s infinite cubic-bezier(0.4, -0.9, 0.9, 1);
+  animation: stop 0.5s infinite cubic-bezier(0.4, -0.9, 0.9, 1);
+  -webkit-animation-iteration-count: 1;
+  animation-iteration-count: 1;
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+}
+body .container #btn:checked ~ .time {
+  -webkit-animation: time 0.3s infinite linear;
+  -moz-animation: time 0.3s infinite linear;
+  -o-animation: time 0.3s infinite linear;
+  animation: time 0.3s infinite linear;
+  -webkit-animation-iteration-count: 1;
+  animation-iteration-count: 1;
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+  animation-delay: 0.3s;
+}
+body .container #btn:checked ~ .time .h_m:after {
+  -webkit-animation: to_24 86400s infinite linear;
+  -moz-animation: to_24 86400s infinite linear;
+  -o-animation: to_24 86400s infinite linear;
+  animation: to_24 86400s infinite linear;
+  -webkit-animation-delay: 1800s;
+  animation-delay: 1800s;
+}
+body .container #btn:checked ~ .time .h_m:before {
+  -webkit-animation: to_60 3600s infinite linear;
+  -moz-animation: to_60 3600s infinite linear;
+  -o-animation: to_60 3600s infinite linear;
+  animation: to_60 3600s infinite linear;
+  -webkit-animation-delay: 30s;
+  animation-delay: 30s;
+}
+body .container #btn:checked ~ .time .s_ms:before {
+  -webkit-animation: to_60 60s infinite linear;
+  -moz-animation: to_60 60s infinite linear;
+  -o-animation: to_60 60s infinite linear;
+  animation: to_60 60s infinite linear;
+  -webkit-animation-delay: 0.5s;
+  animation-delay: 0.5s;
+}
+body .container #btn:checked ~ .time .s_ms:after {
+  -webkit-animation: to_100 1s infinite linear;
+  -moz-animation: to_100 1s infinite linear;
+  -o-animation: to_100 1s infinite linear;
+  animation: to_100 1s infinite linear;
+}
+body .container .time {
+  position: absolute;
+  width: 100%;
+  top: 110%;
+  opacity: 0;
+}
+body .container .time > * {
+  display: inline-block;
+  width: 50%;
+  margin: -2px;
+  color: #a2a2a2;
+  font-family: "Fjalla One", sans-serif;
+  font-size: 1.3em;
+}
+body .container .time .h_m:after {
+  float: right;
+  position: relative;
+  content: "00";
+}
+body .container .time .h_m:before {
+  float: right;
+  position: relative;
+  content: ":00";
+}
+body .container .time .s_ms:before {
+  float: left;
+  position: relative;
+  content: ":00";
+}
+body .container .time .s_ms:after {
+  float: left;
+  position: relative;
+  content: ":00";
+}
+
+input{
+    padding: 10px;
+    color: white;
+    border: 1px solid rgb(30, 30, 41);
+    border-radius: 10px;
+    background-color: black;
+    font-weight: bold;
+    text-align: center;
+}

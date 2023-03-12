@@ -1,50 +1,68 @@
-const express = require('express')
-const http = require('http')
-const path = require('path')
-const socketio = require('socket.io')
-const WavEncoder = require('wav-encoder')
-const fs = require('fs')
-const app = express()
+/* ######### ######### ######### GENERAL ######### ######### ######### ######### */
+const path              = require('path');
+const fs                = require('fs');
 
-app.use('/', express.static(path.join(__dirname, 'public')))
 
-server = http.createServer(app).listen(3000, function() {
-    console.log('Example app listening on port 3000')
-})
+/* ######### ######### ######### SETTINGS ######### ######### ######### ######### */
+const settings          = require('./settings/settings');
 
-const io = socketio.listen(server)
+/* ######### ######### ######### SERVER ######### ######### ######### ######### */
+const express           = require('express');
+const app               = express();
+const socketio          = require('socket.io');
+
+
+/* ######### ######### ######### AUDIO ######### ######### ######### ######### */
+const wavEncoder        = require('wav-encoder');
+
+
+/* ######### ######### ######### ### ######### ######### ######### ######### ######### */
+/* ######### ######### ######### END LIBRARIES ######### ######### ######### ######### */
+/* ######### ######### ######### ### ######### ######### ######### ######### ######### */
+
+
+
+
+
+/* ######### ######### ######### SERVER ######### ######### ######### ######### */
+app.use('/', express.static(path.join(__dirname, 'public')));
+const server = app.listen(settings.server.port, function(err){
+    if (err) console.log(err);
+    console.log("Server listening on Port", settings.server.port);
+});
+
+
+
+/* ######### ######### ######### SOCKETS ######### ######### ######### ######### */
+const io = socketio.listen(server);
 
 io.on('connection', (socket) => {
-    let sampleRate = 48000
-    let buffer = []
-
     socket.on('start', (data) => {
+        // Samplerate comes from client
         sampleRate = data.sampleRate
-        console.log(`Sample Rate: ${sampleRate}`)
     })
 
-    socket.on('send_pcm', (data) => {
-        // data: { "1": 11, "2": 29, "3": 33, ... }
-        const itr = data.values()
+    let buffer = [];
+    socket.on('sendAudioPCM', (data) => {
+        const samples = data.values();
         const buf = new Array(data.length)
         for (var i = 0; i < buf.length; i++) {
-            buf[i] = itr.next().value
+            buf[i] = samples.next().value
         }
         buffer = buffer.concat(buf)
     })
 
-    socket.on('stop', (data, ack) => {
-        console.log(data);
-        console.log("stop wurde gesendet");
-
-        const f32array = toF32Array(buffer)
-        const filename = './public/wav/' + data.filename + '.wav'
-        exportWAV(f32array, sampleRate, filename)
-        ack({ filename: filename })
+    socket.on('stop', (data) => {
+        const f32array = toF32Array(buffer);
+        const filename = `${data.filename}.wav`;
+        exportWAV(f32array, sampleRate, filename);
     })
 })
 
-// Convert byte array to Float32Array
+
+
+
+/* ######### ######### ######### AUDIO ######### ######### ######### ######### */
 const toF32Array = (buf) => {
     const buffer = new ArrayBuffer(buf.length)
     const view = new Uint8Array(buffer)
@@ -54,21 +72,21 @@ const toF32Array = (buf) => {
     return new Float32Array(buffer)
 }
 
-// data: Float32Array
-// sampleRate: number
-// filename: string
 const exportWAV = (data, sampleRate, filename) => {
+
     const audioData = {
         sampleRate: sampleRate,
         channelData: [data]
     }
-    WavEncoder.encode(audioData).then((buffer) => {
-        fs.writeFile(filename, Buffer.from(buffer), (e) => {
+
+    wavEncoder.encode(audioData).then((buffer) => {
+        fs.writeFile(path.join(settings.audio.destinationFolder, filename), Buffer.from(buffer), (e) => {
             if (e) {
                 console.log(e)
             } else {
-                console.log(`Successfully saved ${filename}`)
+                console.log(`File successfully saved as ${filename}`)
             }
         })
     })
+
 }
